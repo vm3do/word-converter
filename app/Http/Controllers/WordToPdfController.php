@@ -32,24 +32,41 @@ class WordToPdfController extends Controller
             
             // Read the HTML content
             $htmlContent = file_get_contents($tempHtmlPath);
+            
+            $customCss = '<style>
+                table { 
+                    width: 100%; 
+                    border-collapse: collapse; 
+                    table-layout: fixed;
+                }
+                td, th { 
+                    overflow-wrap: break-word;
+                    max-width: 100%;
+                }
+                * {
+                    max-width: 100%;
+                    box-sizing: border-box;
+                }
+            </style>';
 
+            $htmlContent = str_replace('</head>', $customCss . '</head>', $htmlContent);
+            
+            // Configure Dompdf
             $options = new Options();
             $options->set('isHtml5ParserEnabled', true);
             $options->set('isPhpEnabled', true);
+            $options->set('dpi', 150);
             
-            // Create Dompdf instance
+            // Dompdf
             $dompdf = new Dompdf($options);
             $dompdf->loadHtml($htmlContent);
-            
             $dompdf->setPaper('A4', 'portrait');
-            
-            // Render PDF
             $dompdf->render();
             
             // Clean up temporary file
             unlink($tempHtmlPath);
             
-            // Return the PDF for download
+            // Return the PDF
             return $dompdf->stream('converted.pdf', [
                 'Attachment' => true
             ]);
