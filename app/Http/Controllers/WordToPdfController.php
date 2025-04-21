@@ -33,7 +33,6 @@ class WordToPdfController extends Controller
             // Read the HTML content
             $htmlContent = file_get_contents($tempHtmlPath);
             
-            // Add custom CSS with font support for Chinese characters
             $customCss = '<style>
                 @font-face {
                     font-family: "Noto Sans SC";
