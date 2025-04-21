@@ -19,7 +19,7 @@
         <form action="{{ route('convert.word-to-pdf') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <input type="file" name="word_file" id="word_file" accept=".doc,.docx" class="hidden" required>
+                <input type="file" name="word_file" id="word_file" accept=".doc,.docx" class="hidden" required onchange="showFileName()">
                 <label for="word_file" class="cursor-pointer">
                     <div class="text-gray-600">
                         <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
@@ -29,6 +29,7 @@
                         <p class="text-xs text-gray-500">DOC or DOCX (MAX. 10MB)</p>
                     </div>
                 </label>
+                <div id="file-name" class="mt-4 text-sm text-green-800 hidden"></div>
             </div>
             
             <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200">
@@ -37,5 +38,18 @@
         </form>
     </div>
 
+    <script>
+        function showFileName() {
+            const input = document.getElementById('word_file');
+            const fileNameDiv = document.getElementById('file-name');
+            
+            if (input.files.length > 0) {
+                fileNameDiv.textContent = 'Selected file: ' + input.files[0].name;
+                fileNameDiv.classList.remove('hidden');
+            } else {
+                fileNameDiv.classList.add('hidden');
+            }
+        }
+    </script>
 </body>
 </html> 
